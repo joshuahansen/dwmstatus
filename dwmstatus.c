@@ -18,9 +18,6 @@
 #include <X11/Xlib.h>
 
 char *tzaustralia = "Australia/Melbourne";
-char *tzargentina = "America/Buenos_Aires";
-char *tzutc = "UTC";
-char *tzberlin = "Europe/Berlin";
 
 static Display *dpy;
 
@@ -183,7 +180,6 @@ main(void)
 	char *avgs;
 	char *bat;
 	char *tmmel;
-	char *t0, *t1, *t2;
 
 	if (!(dpy = XOpenDisplay(NULL))) {
 		fprintf(stderr, "dwmstatus: cannot open display.\n");
@@ -194,17 +190,11 @@ main(void)
 		avgs = loadavg();
 		bat = getbattery("/sys/class/power_supply/BAT1");
 		tmmel = mktimes("%a %d %b %H:%M %Z %Y", tzaustralia);
-		t0 = gettemperature("/sys/devices/virtual/hwmon/hwmon0", "temp1_input");
-		t1 = gettemperature("/sys/devices/virtual/hwmon/hwmon2", "temp1_input");
-		t2 = gettemperature("/sys/devices/virtual/hwmon/hwmon4", "temp1_input");
 
-		status = smprintf("T:%s|%s|%s L:%s B:%s | %s",
-				t0, t1, t2, avgs, bat, tmmel);
+		status = smprintf("L:%s | B:%s | %s",
+				avgs, bat, tmmel);
 		setstatus(status);
 
-		free(t0);
-		free(t1);
-		free(t2);
 		free(avgs);
 		free(bat);
 		free(tmmel);
